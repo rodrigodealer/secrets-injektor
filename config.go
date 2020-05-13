@@ -13,12 +13,9 @@ type Provider struct {
 	SecretKey string `yaml:"secret_key"`
 }
 
-type Environment struct {
-	Envs map[string]string `yaml:"envs"`
-}
-
 type Config struct {
 	Provider Provider `yaml:"provider"`
+	Environment []string
 }
 
 func (m *Config) Load(data []byte) {
