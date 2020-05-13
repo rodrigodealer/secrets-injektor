@@ -14,8 +14,8 @@ type Provider struct {
 }
 
 type Config struct {
-	Provider Provider `yaml:"provider"`
-	Environment []string
+	Provider    Provider `yaml:"provider"`
+	Environment []string `yaml:"environment"`
 }
 
 func (m *Config) Load(data []byte) {
