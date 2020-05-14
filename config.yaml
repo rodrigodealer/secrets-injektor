@@ -1,0 +1,7 @@
+provider:
+  name: vault
+  token: s.kJeKLfTtFfOM2yxXzzYQAxtF
+  address: "http://localhost:8200"
+environment:
+  - ONE_ENV=hello_set
+  - TWO_ENV=hello_set
