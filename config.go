@@ -23,4 +23,8 @@ func (m *Config) Load(data []byte) {
 	if err != nil {
 		glg.Errorf("error: %v", err)
 	}
+
+	if len(data) > 0 && err == nil {
+		glg.Info("Config loaded")
+	}
 }
