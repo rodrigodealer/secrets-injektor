@@ -1,4 +1,4 @@
-package main
+package providers
 
 import (
 	"github.com/hashicorp/vault/api"
