@@ -1,9 +1,12 @@
 package providers
 
 import (
+	"strings"
+
 	"github.com/hashicorp/vault/api"
 	"github.com/kpango/glg"
-	"strings"
+
+	"github.com/rodrigodealer/secrets-injektor/model"
 )
 
 type EnvironmentVariable struct {
@@ -24,8 +27,12 @@ func GetEnvParts(env string) EnvironmentVariable {
 	return EnvironmentVariable{Name: parts[0], Value: parts[1]}
 }
 
-func getOnVault() {
-
+func GetOnVault(c model.Config) {
+	v := Vault{}
+	v.Connect(c.Provider.Token, c.Provider.Address)
+	var secretName = "secret/data/data/hello_set"
+	var secret = v.GetSecret(secretName)
+	glg.Infof("Secret found: %s=%s", secretName, secret)
 }
 
 type Vault struct {
@@ -54,5 +61,6 @@ func (m *Vault) GetSecret(secretName string) string {
 	if err != nil {
 		glg.Errorf("Error getting secret in Vault: %s", err.Error())
 	}
-	return secret.Data["hello"].(string)
+	var data = secret.Data["data"].(map[string]interface{})
+	return data["value"].(string)
 }
