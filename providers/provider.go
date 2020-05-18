@@ -5,11 +5,22 @@ import (
 	"github.com/rodrigodealer/secrets-injektor/model"
 )
 
-func DecideProvider(c model.Config) string {
+type ProviderChooserI interface {
+	callVault(c model.Config) string
+}
+
+type ProviderChooser struct {
+}
+
+func (p *ProviderChooser) callVault(c model.Config) string {
+	GetOnVault(c)
+	return "vault"
+}
+
+func DecideProvider(c model.Config, chooser ProviderChooserI) string {
 	switch c.Provider.Name {
 	case "vault":
-		GetOnVault(c)
-		return "vault"
+		return chooser.callVault(c)
 	case "ssm":
 		println("TBD")
 	default:

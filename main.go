@@ -14,7 +14,7 @@ func main() {
 	config := model.Config{}
 	config.Load(data)
 	check("Error loading file: %s", err)
-	providers.GetOnVault(config)
+	providers.DecideProvider(config, &providers.ProviderChooser{})
 }
 
 func check(message string, e error) {
