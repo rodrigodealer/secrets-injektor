@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetEnvs(t *testing.T) {
-	var theArray []string = []string{"VAR_A=bla", "VAR_B=bla"}
+	var theArray = []string{"VAR_A=bla", "VAR_B=bla"}
 
 	var values = GetEnvs(theArray)
 
