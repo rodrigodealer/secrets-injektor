@@ -1,6 +1,7 @@
 package providers
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,6 +15,14 @@ func TestGetEnvs(t *testing.T) {
 
 	assert.Equal(t, 2, len(values), "they should be equal")
 	assert.Equal(t, "bla", values[0].Value, "they should be equal")
+}
+
+func TestSetEnvs(t *testing.T) {
+	var theArray = []EnvironmentVariable{EnvironmentVariable{Name: "bla", Value: "blu"}}
+
+	SetEnvs(theArray)
+
+	assert.Equal(t, "blu", os.Getenv("bla"), "they should be equal")
 }
 
 func TestGetEnvParts(t *testing.T) {

@@ -13,7 +13,7 @@ type ProviderChooser struct {
 }
 
 func (p *ProviderChooser) callVault(c model.Config) string {
-	GetOnVault(c)
+	SetEnvs(GetOnVault(c))
 	return "vault"
 }
 

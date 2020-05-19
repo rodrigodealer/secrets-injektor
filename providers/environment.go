@@ -1,6 +1,11 @@
 package providers
 
-import "strings"
+import (
+	"os"
+	"strings"
+
+	"github.com/kpango/glg"
+)
 
 type EnvironmentVariable struct {
 	Name  string
@@ -13,6 +18,13 @@ func GetEnvs(envs []string) []EnvironmentVariable {
 		m = append(m, GetEnvParts(element))
 	}
 	return m
+}
+
+func SetEnvs(envs []EnvironmentVariable) {
+	for _, element := range envs {
+		os.Setenv(element.Name, element.Value)
+	}
+	glg.Infof("%v environment variables set.", len(envs))
 }
 
 func GetEnvParts(env string) EnvironmentVariable {
