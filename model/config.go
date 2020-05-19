@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/kpango/glg"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
 )
 
 type Provider struct {
@@ -16,6 +17,18 @@ type Provider struct {
 type Config struct {
 	Provider    Provider `yaml:"provider"`
 	Environment []string `yaml:"environment"`
+}
+
+func OpenConfig(filename string) []byte {
+	data, err := ioutil.ReadFile("config.yaml")
+	check("Error loading file: %s", err)
+	return data
+}
+
+func check(message string, e error) {
+	if e != nil {
+		glg.Errorf(message, e.Error())
+	}
 }
 
 func (m *Config) Load(data []byte) {
