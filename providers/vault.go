@@ -1,7 +1,7 @@
 package providers
 
 import (
-	"strings"
+	"fmt"
 
 	"github.com/hashicorp/vault/api"
 	"github.com/kpango/glg"
@@ -9,30 +9,16 @@ import (
 	"github.com/rodrigodealer/secrets-injektor/model"
 )
 
-type EnvironmentVariable struct {
-	Name  string
-	Value string
-}
-
-func GetEnvs(envs []string) []EnvironmentVariable {
-	m := []EnvironmentVariable{}
-	for _, element := range envs {
-		m = append(m, GetEnvParts(element))
-	}
-	return m
-}
-
-func GetEnvParts(env string) EnvironmentVariable {
-	parts := strings.Split(env, "=")
-	return EnvironmentVariable{Name: parts[0], Value: parts[1]}
-}
-
-func GetOnVault(c model.Config) {
+func GetOnVault(c model.Config) []EnvironmentVariable {
 	v := Vault{}
 	v.Connect(c.Provider.Token, c.Provider.Address)
-	var secretName = "secret/data/data/hello_set"
-	var secret = v.GetSecret(secretName)
-	glg.Infof("Secret found: %s=%s", secretName, secret)
+	var envs = GetEnvs(c.Environment)
+	for _, element := range envs {
+		var secret = v.GetSecret(fmt.Sprintf("secret/data/data/%s", element.Value))
+		element.Value = secret
+		glg.Infof("Secret found: %s", element.Name)
+	}
+	return envs
 }
 
 type Vault struct {
