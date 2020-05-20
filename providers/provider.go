@@ -13,7 +13,8 @@ type ProviderChooser struct {
 }
 
 func (p *ProviderChooser) callVault(c model.Config) string {
-	SetEnvs(GetOnVault(c))
+	v := Vault{}
+	SetEnvs(GetOnVault(c, v))
 	return "vault"
 }
 
@@ -23,8 +24,10 @@ func DecideProvider(c model.Config, chooser ProviderChooserI) string {
 		return chooser.callVault(c)
 	case "ssm":
 		println("TBD")
+		return "ssm"
 	default:
 		glg.Infof("Please choose a provider")
+		return ""
 	}
 	return ""
 }

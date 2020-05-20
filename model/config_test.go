@@ -29,5 +29,16 @@ func TestConfigLoadWithError(t *testing.T) {
 	var c = Config{}
 
 	c.Load([]byte(data))
+}
 
+func TestOpenConfig(t *testing.T) {
+	var c = OpenConfig("../config.yaml")
+
+	assert.True(t, len(c) > 0, "they should be equal")
+}
+
+func TestOpenConfigWithFailure(t *testing.T) {
+	var c = OpenConfig("config.yaml")
+
+	assert.True(t, len(c) == 0, "they should be equal")
 }

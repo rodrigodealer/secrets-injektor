@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 func TestGetEnvs(t *testing.T) {
@@ -31,8 +30,4 @@ func TestGetEnvParts(t *testing.T) {
 	var env = GetEnvParts(theString)
 
 	assert.Equal(t, "bla", env.Value, "they should be equal")
-}
-
-type VaultMock struct {
-	mock.Mock
 }
