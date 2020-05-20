@@ -9,6 +9,16 @@ import (
 	"github.com/rodrigodealer/secrets-injektor/model"
 )
 
+type VaultI interface {
+	Connect(token string, addr string)
+
+	GetSecret(secretName string) string
+}
+
+type Vault struct {
+	Client *api.Logical
+}
+
 func GetOnVault(c model.Config, v VaultI) []EnvironmentVariable {
 	v.Connect(c.Provider.Token, c.Provider.Address)
 	var envs = GetEnvs(c.Environment)
@@ -20,19 +30,7 @@ func GetOnVault(c model.Config, v VaultI) []EnvironmentVariable {
 	return envs
 }
 
-type VaultI interface {
-	New(addr string) *api.Client
-
-	Connect(token string, addr string)
-
-	GetSecret(secretName string) string
-}
-
-type Vault struct {
-	Client *api.Logical
-}
-
-func (m Vault) New(addr string) *api.Client {
+func (m *Vault) Connect(token string, addr string) {
 	config := &api.Config{
 		Address: addr,
 	}
@@ -40,16 +38,11 @@ func (m Vault) New(addr string) *api.Client {
 	if err != nil {
 		glg.Errorf("Error connecting to Vault: %s", err.Error())
 	}
-	return client
-}
-
-func (m Vault) Connect(token string, addr string) {
-	client := m.New(addr)
 	client.SetToken(token)
 	m.Client = client.Logical()
 }
 
-func (m Vault) GetSecret(secretName string) string {
+func (m *Vault) GetSecret(secretName string) string {
 	secret, err := m.Client.Read(secretName)
 	if err != nil {
 		glg.Errorf("Error getting secret in Vault: %s", err.Error())
