@@ -11,23 +11,24 @@ import (
 
 func TestGetOnVault(t *testing.T) {
 	var data = `
-	provider:
-	  name: vault
-	  token: s.kJeKLfTtFfOM2yxXzzYQAxtF
-	  address: "http://localhost:8200"
-	environment:
-	- ONE_ENV=hello_set
-	- TWO_ENV=hello_set`
+provider:
+  name: vault
+  token: s.7LXjNtEutLhDwmW8Ff0VuTRt
+  address: "http://localhost:8200"
+environment:
+  - ONE_ENV=hello_set
+  - TWO_ENV=hello_set
+`
 	var c = model.Config{}
 	c.Load([]byte(data))
 
-	mock := new(VaultMock)
+	vaultMock := new(VaultMock)
 
-	var result = GetOnVault(c, mock)
+	vaultMock.On("GetSecret", mock.Anything).Return("bla")
 
-	var expect = []EnvironmentVariable{}
+	var result = GetOnVault(c, vaultMock)
 
-	assert.Equal(t, expect, result, "they should be equal")
+	assert.Equal(t, 2, len(result), "they should be equal")
 }
 
 type VaultMock struct {
