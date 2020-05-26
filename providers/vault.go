@@ -7,6 +7,7 @@ import (
 	"github.com/kpango/glg"
 
 	"github.com/rodrigodealer/secrets-injektor/model"
+	"github.com/rodrigodealer/secrets-injektor/util"
 )
 
 type VaultI interface {
@@ -25,7 +26,10 @@ func GetOnVault(c model.Config, v VaultI) []EnvironmentVariable {
 	for _, element := range envs {
 		var secret = v.GetSecret(fmt.Sprintf("secret/data/data/%s", element.Value))
 		element.Value = secret
-		glg.Infof("Secret found: %s", element.Name)
+
+		if util.IsLoggingEnabled() {
+			glg.Infof("Secret found: %s", element.Name)
+		}
 	}
 	return envs
 }

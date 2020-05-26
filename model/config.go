@@ -5,6 +5,8 @@ import (
 
 	"github.com/kpango/glg"
 	"gopkg.in/yaml.v2"
+
+	"github.com/rodrigodealer/secrets-injektor/util"
 )
 
 type Provider struct {
@@ -28,17 +30,19 @@ func OpenConfig(filename string) []byte {
 
 func check(message string, e error) {
 	if e != nil {
-		glg.Errorf(message, e.Error())
+		if util.IsLoggingEnabled() {
+			glg.Errorf(message, e.Error())
+		}
 	}
 }
 
 func (m *Config) Load(data []byte) {
 	err := yaml.Unmarshal([]byte(data), &m)
-	if err != nil {
-		glg.Errorf("error: %v", err)
-	}
+	check("error: %v", err)
 
 	if len(data) > 0 && err == nil {
-		glg.Info("Config loaded")
+		if util.IsLoggingEnabled() {
+			glg.Info("Config loaded")
+		}
 	}
 }

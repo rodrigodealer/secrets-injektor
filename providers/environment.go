@@ -5,6 +5,8 @@ import (
 	"strings"
 
 	"github.com/kpango/glg"
+
+	"github.com/rodrigodealer/secrets-injektor/util"
 )
 
 type EnvironmentVariable struct {
@@ -24,7 +26,10 @@ func SetEnvs(envs []EnvironmentVariable) {
 	for _, element := range envs {
 		os.Setenv(element.Name, element.Value)
 	}
-	glg.Infof("%v environment variables set.", len(envs))
+	if util.IsLoggingEnabled() {
+		glg.Infof("%v environment variables set.", len(envs))
+	}
+
 }
 
 func GetEnvParts(env string) EnvironmentVariable {

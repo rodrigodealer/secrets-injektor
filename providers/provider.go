@@ -3,6 +3,7 @@ package providers
 import (
 	"github.com/kpango/glg"
 	"github.com/rodrigodealer/secrets-injektor/model"
+	"github.com/rodrigodealer/secrets-injektor/util"
 )
 
 type ProviderChooserI interface {
@@ -24,7 +25,9 @@ func DecideProvider(c model.Config, chooser ProviderChooserI) interface{} {
 		println("TBD")
 		return "ssm"
 	default:
-		glg.Infof("Please choose a provider")
+		if util.IsLoggingEnabled() {
+			glg.Infof("Please choose a provider")
+		}
 		return ""
 	}
 	return ""
