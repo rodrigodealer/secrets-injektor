@@ -12,18 +12,19 @@ func TestVaultValue(t *testing.T) {
 	var data = `
 provider:
   name: vault
-  token: s.kJeKLfTtFfOM2yxXzzYQAxtF
+  token: s.7LXjNtEutLhDwmW8Ff0VuTRt
   address: "http://localhost:8200"
 environment:
-- ONE_ENV=hello_set
-- TWO_ENV=hello_set`
+  - ONE_ENV=hello_set
+  - TWO_ENV=hello_set
+`
 	var c = model.Config{}
 
 	c.Load([]byte(data))
 
 	mock := new(ProviderChooserMock)
 	var result = DecideProvider(c, mock)
-	assert.Equal(t, "vault", result, "they should be equal")
+	assert.Equal(t, []EnvironmentVariable{}, result, "they should be equal")
 }
 
 func TestSSMValue(t *testing.T) {
@@ -80,6 +81,6 @@ type ProviderChooserMock struct {
 	mock.Mock
 }
 
-func (m *ProviderChooserMock) callVault(c model.Config) string {
-	return "vault"
+func (m *ProviderChooserMock) callVault(c model.Config) []EnvironmentVariable {
+	return []EnvironmentVariable{}
 }

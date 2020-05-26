@@ -11,5 +11,6 @@ func main() {
 	config := model.Config{}
 	config.Load(data)
 
-	providers.DecideProvider(config, &providers.ProviderChooser{})
+	envs := providers.DecideProvider(config, &providers.ProviderChooser{}).([]providers.EnvironmentVariable)
+	providers.SetEnvs(envs)
 }
